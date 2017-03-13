@@ -11,6 +11,9 @@ module Danger
   # @tags synx, xcodeproj
   #
   class DangerSynx < Plugin
+
+    attr_accessor :exclusions
+
     # Ensures clean project structure. Runs Synx on all .xcodeproj
     # files that where either added or modified.
     #
@@ -64,9 +67,12 @@ module Danger
     # @return [Array<(String, String)>]
     #
     def synx_issues
-      (git.modified_files + git.added_files)
-        .select { |f| f.include? '.xcodeproj' }
-        .reduce([]) { |i, f| i + synx_project(f) }
+      exclude = exclusions || []
+      exclude = [exclude] if exclude.instance_of?(String)
+      exclude = [] unless exclude.instance_of?(Array)
+
+      projects = (git.modified_files + git.added_files).select { |f| f.include? '.xcodeproj' }
+      (projects - exclude).reduce([]) { |i, f| i + synx_project(f) }
     end
 
     # Triggers Synx in a dry-run mode on a project file.
