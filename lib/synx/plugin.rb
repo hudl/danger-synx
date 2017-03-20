@@ -71,8 +71,11 @@ module Danger
       exclude = [exclude] if exclude.instance_of?(String)
       exclude = [] unless exclude.instance_of?(Array)
 
-      projects = (git.modified_files + git.added_files).select { |f| f.include? '.xcodeproj' }
-      (projects - exclude).reduce([]) { |i, f| i + synx_project(f) }
+      projects = (git.modified_files + git.added_files)
+        .select { |f| f.include? '.xcodeproj' }
+        .reject { |p| exclude.include?(project_path(p)) }
+        
+      projects.reduce([]) { |i, f| i + synx_project(f) }
     end
 
     # Triggers Synx in a dry-run mode on a project file.
