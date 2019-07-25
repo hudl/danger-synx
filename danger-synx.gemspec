@@ -5,7 +5,7 @@ require 'synx/gem_version.rb'
 
 Gem::Specification.new do |spec|
   spec.name          = 'danger-synx'
-  spec.version       = Synx::VERSION
+  spec.version       = DangerSynx::VERSION
   spec.authors       = ['Jakub Turek']
   spec.email         = ['jkbturek@gmail.com']
   spec.description   = %q{A Danger plugin for running commited .xcodeproj through Synx.}
