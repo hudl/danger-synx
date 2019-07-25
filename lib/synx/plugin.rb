@@ -80,7 +80,7 @@ module Danger
     def synx_project(modified_file_path)
       path = project_path modified_file_path
       name = project_name path
-      output = `#{synx} -w warning "#{path}" 2>&1`.lines
+      output = `#{synx} --no-sort-by-name -w warning "#{path}" 2>&1`.lines
       output
         .map(&:strip)
         .select { |o| o.start_with? 'warning: ' }
